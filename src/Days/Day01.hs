@@ -21,19 +21,27 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = decimal `sepBy` endOfLine
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [Int]
 
-type OutputA = Void
+type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
 
 ------------ PART A ------------
 partA :: Input -> OutputA
-partA = error "Not implemented yet!"
+partA input = mul $ head [(x, y) | x <- input, y <- input, x+y == 2020]
+    where
+        mul p = fst p * snd p
+
+-- partA input = head [x*y | x <- input, y <- input, x+y == 2020]
 
 ------------ PART B ------------
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB input = mul $ head [(x, y, z) | x <- input, y <- input, z <- input, x+y+z == 2020]
+    where
+        mul (x,y,z) = x * y * z
+
+-- partB input = head [x*y*z | x <- input, y <- input, z <- input, x+y+z == 2020]

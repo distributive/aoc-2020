@@ -1,10 +1,10 @@
-name:                aoc-template
+name:                aoc2020
 version:             0.1.0.0
-github:              "samcoy3/advent-of-code-template"
+github:              "distributive/aoc-2020"
 license:             BSD3
-author:              "Sam Coy"
-maintainer:          "samcoy3@gmail.com"
-copyright:           "2020 Sam Coy"
+author:              "Amelie WD"
+maintainer:          "github@ameliewd.com"
+copyright:           "2020 Amelie WD"
 
 extra-source-files:
 - README.md
@@ -50,7 +50,7 @@ library:
     - DeriveFoldable
 
 executables:
-  aoc-template-exe:
+  aoc2020-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -74,4 +74,4 @@ executables:
     - DeriveFunctor
     - DeriveFoldable
     dependencies:
-    - aoc-template
+    - aoc2020
