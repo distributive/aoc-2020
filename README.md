@@ -1,4 +1,4 @@
-# aoc2020
+# AoC 2020
 
 These are my solutions for Advent of Code 2020, built on Sam Coy's Haskell template: https://github.com/samcoy3/advent-of-code-2020/
 
