@@ -38,4 +38,4 @@ partA input = sum $ fmap size (fmap (S.fromList . concat) input)
 
 ------------ PART B ------------
 partB :: Input -> OutputB
-partB input = sum $ fmap (size . (L.foldr intersection $ S.fromList "abcdefghijklmnopqrstuvwxyz") . (fmap S.fromList)) input
+partB = sum . fmap (size . (L.foldr1 intersection) . (fmap S.fromList))
