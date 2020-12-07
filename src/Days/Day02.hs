@@ -24,14 +24,14 @@ runDay = R.runDay inputParser partA partB
 ------------ PARSER ------------
 inputParser :: Parser Input
 inputParser = ruleAndPassword `sepBy` endOfLine
-  where
-    ruleAndPassword = do
-      (lower, upper) <- decimal `around` char '-'
-      skipSpace
-      givenLetter <- letter
-      string ": "
-      password <- many1 letter
-      return (PasswordRule {..}, password)
+    where
+        ruleAndPassword = do
+            (lower, upper) <- decimal `around` char '-'
+            skipSpace
+            givenLetter <- letter
+            string ": "
+            password <- many1 letter
+            return (PasswordRule {..}, password)
 
 -- This, and the associated types, were copied from Sam's solution
 -- Stupid black magic fuckery
