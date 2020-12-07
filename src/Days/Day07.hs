@@ -71,4 +71,4 @@ partB input = getBags ("shiny gold", 1)
     where
         getBags (query, count) =
             let contents = Map.findWithDefault Map.empty query input
-            in count * ((sum $ Map.elems contents) + (foldr (+) 0 $ fmap (getBags) $ Map.toList contents))
+            in count * ((sum $ Map.elems contents) + (sum $ fmap (getBags) $ Map.toList contents))
