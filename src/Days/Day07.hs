@@ -14,6 +14,11 @@ import qualified Util.Util as U
 import qualified Program.RunDay as R (runDay)
 import Data.Attoparsec.Text
 import Data.Void
+
+import Control.Applicative
+import Control.Monad
+
+import Util.Parsers
 {- ORMOLU_ENABLE -}
 
 runDay :: Bool -> String -> IO ()
@@ -21,19 +26,49 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = Map.fromList <$> parser `sepBy` endOfLine
+    where
+        parser = do
+            c <- colour
+            string " bags contain "
+            contents <- empty <|> bag `sepBy` string ", "
+            char '.'
+            return (c, Map.fromList contents)
+        colour = do
+            (adj, col) <- many1 letter `around` space
+            return (adj ++ " " ++ col)
+        bag = do
+            d <- decimal
+            skipSpace
+            c <- colour
+            string " bag"
+            optional $ string "s"
+            return (c, d)
+        empty = do
+            string "no other bags"
+            return []
 
 ------------ TYPES ------------
-type Input = Void
+type Input = Map String (Map String Int)
 
-type OutputA = Void
+type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
 
 ------------ PART A ------------
 partA :: Input -> OutputA
-partA = error "Not implemented yet!"
+partA input = length . filter id $ fmap (canContain "shiny gold") $ Map.toList input
+    where
+        canContain query (colour, contents)
+            | Map.size contents == 0    = False
+            | Map.member query contents = True
+            | otherwise                 = any id $ fmap (canContain query . getContent) $ Map.keys contents
+        getContent colour = (colour, Map.findWithDefault Map.empty colour input)
 
 ------------ PART B ------------
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB input = getBags ("shiny gold", 1)
+    where
+        getBags (query, count) =
+            let contents = Map.findWithDefault Map.empty query input
+            in count * ((sum $ Map.elems contents) + (foldr (+) 0 $ fmap (getBags) $ Map.toList contents))
