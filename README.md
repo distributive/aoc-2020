@@ -1,6 +1,6 @@
 # AoC 2020
 
-These are my solutions for Advent of Code 2020, built on Sam Coy's Haskell template: https://github.com/samcoy3/advent-of-code-2020/
+These are my solutions for Advent of Code 2020 https://adventofcode.com/, built on Sam Coy's Haskell template: https://github.com/samcoy3/advent-of-code-2020/
 
 Below are the usage instructions as per his original documentation. Please see the original repository for full documentation on the template.
 
