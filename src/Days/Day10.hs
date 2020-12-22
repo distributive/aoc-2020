@@ -1,8 +1,8 @@
 module Days.Day10 (runDay) where
 
 {- ORMOLU_DISABLE -}
-import Data.List
-import Data.Map.Strict (Map)
+import Data.List as L
+import Data.Map.Strict (Map, findWithDefault, member)
 import qualified Data.Map.Strict as Map
 import Data.Maybe
 import Data.Set (Set)
@@ -21,19 +21,37 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = decimal `sepBy` endOfLine
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [Int]
 
-type OutputA = Void
+type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
 
 ------------ PART A ------------
 partA :: Input -> OutputA
-partA = error "Not implemented yet!"
+partA input =
+    let ls = sort $ input ++ [0, maximum input + 3]
+        diffs = zipWith (\a b -> abs (a - b)) ls (tail $ ls)
+    in (length $ filter (==1) diffs) * (length $ filter (==3) diffs)
 
 ------------ PART B ------------
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB input =
+    let sorted = sort $ input ++ [0, maximum input + 3]
+        mapping = traverseSeq (Map.fromList $ getSubsequences sorted) 0 Map.empty
+    in findWithDefault (-1) 0 mapping
+        where
+            getSubsequences [] = []
+            getSubsequences (x:xs) = (x, L.takeWhile (<= x + 3) xs) : getSubsequences xs
+
+            traverseSeq :: Map Int [Int] -> Int -> Map Int Int -> Map Int Int
+            traverseSeq sequences index mem
+                | Map.member index mem       = mem
+                | index == maximum input + 3 = Map.insert index 1 mem
+                | otherwise                  =
+                    let children = findWithDefault [] index sequences
+                        new = foldr (traverseSeq sequences) mem children
+                    in Map.insert index (sum $ fmap (\child -> findWithDefault 1 child new) children) new
