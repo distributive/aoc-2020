@@ -21,19 +21,32 @@ runDay = R.runDay inputParser partA partB
 
 ------------ PARSER ------------
 inputParser :: Parser Input
-inputParser = error "Not implemented yet!"
+inputParser = decimal `sepBy` endOfLine
 
 ------------ TYPES ------------
-type Input = Void
+type Input = [Int]
 
-type OutputA = Void
+type OutputA = Int
 
-type OutputB = Void
+type OutputB = Int
 
 ------------ PART A ------------
 partA :: Input -> OutputA
-partA = error "Not implemented yet!"
+partA input = check (Data.List.take 25 input) (drop 25 input)
+    where
+        check key (x:xs) = if isValid key x then check (tail key ++ [x]) xs else x
+        isValid key val = length [(x,y) | x <- key, y <- key, x + y == val, x /= y] > 0
 
 ------------ PART B ------------
 partB :: Input -> OutputB
-partB = error "Not implemented yet!"
+partB input =
+    let pair = fromJust . fromJust $ find isJust $ checkSum 0 (partA input) 10000000 0 <$> [drop x input | x <- [0..(length input)]]
+    in fst pair + snd pair
+        where
+            checkSum _ _ _ _ [] = Nothing
+            checkSum count val low high (x:xs) =
+                 if
+                     |         x == val -> Nothing
+                     | count + x == val -> Just (low, high)
+                     | count + x  > val -> Nothing
+                     | otherwise        -> checkSum (count + x) val (min x low) (max x high) xs
